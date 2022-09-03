@@ -4,6 +4,9 @@ const mongoose = require('mongoose') //require mongoose
 const exphbs = require('express-handlebars')
 const Todo = require('./models/todo')
 const app = express()
+const bodyParser = require('body-parser')
+
+//Mongoose connection
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true }) //setting connection to mongoDB
 
 const db = mongoose.connection
@@ -16,15 +19,33 @@ db.once('open', () => {
   console.log('mongoDB connected!')
 })
 
-app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs'}))
+//Handlebars Start engine
+app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
 
+//Bodyparser Start
+app.use(bodyParser.urlencoded({ extended: true }))
+
 //Setting routes
+//route for undex
 app.get('/', (req, res) => {
   Todo.find()
-  .lean()
-  .then(todos => res.render('index', { todos }))
-  .catch(error => console.error(error))
+    .lean()
+    .then(todos => res.render('index', { todos }))
+    .catch(error => console.error(error))
+})
+
+//route to new entry page
+app.get('/todos/new', (req, res) => {
+  return res.render('new')
+})
+
+//route to post new entry
+app.post('/todos', (req, res) => {
+  const name = req.body.name
+  return Todo.create({ name })
+    .then(() => res.redirect('/'))
+    .catch(error => console.log(error))
 })
 
 //Open and listen to server port
