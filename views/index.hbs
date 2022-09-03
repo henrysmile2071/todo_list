@@ -1,2 +1,8 @@
 {{!-- index.hbs --}}
-<h2>Hello This is index</h2>
+<ul>
+  {{#each todos}}
+  <li>
+    {{this.name}}
+  </li>
+  {{/each}}
+</ul>
