@@ -48,6 +48,14 @@ app.post('/todos', (req, res) => {
     .catch(error => console.log(error))
 })
 
+//route to read detail
+app.get('/todos/:id', (req, res) => {
+const id = req.params.id
+return Todo.findById(id)
+.lean()
+.then((todo) => res.render('detail', { todo }))
+})
+
 //Open and listen to server port
 const port = 3000
 app.listen(port, () => {
