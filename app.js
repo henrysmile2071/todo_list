@@ -5,6 +5,7 @@ const exphbs = require('express-handlebars')
 const Todo = require('./models/todo')
 const app = express()
 const bodyParser = require('body-parser')
+const { TopologyDescription } = require('mongodb')
 
 //Mongoose connection
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true }) //setting connection to mongoDB
@@ -50,10 +51,34 @@ app.post('/todos', (req, res) => {
 
 //route to read detail
 app.get('/todos/:id', (req, res) => {
-const id = req.params.id
-return Todo.findById(id)
-.lean()
-.then((todo) => res.render('detail', { todo }))
+  const id = req.params.id
+  return Todo.findById(id)
+    .lean()
+    .then((todo) => res.render('detail', { todo }))
+})
+
+//route to edit detail
+app.get('/todos/:id/edit', (req, res) => {
+  const id = req.params.id
+  return Todo.findById(id)
+    .lean()
+    .then((todo) => res.render('edit', { todo }))
+    .catch(error => console.log(error))
+})
+
+//route to update server after edit
+app.post('/todos/:id/edit', (req, res) => {
+  const id = req.params.id
+  const name = req.body.name
+  return Todo.findById(id)
+    .then(todo => {
+      todo.name = name
+      return todo.save()
+    })
+    .then(() => {
+      res.redirect(`/todos/${id}`)
+    })
+    .catch(error => console.log(error))
 })
 
 //Open and listen to server port
