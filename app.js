@@ -69,10 +69,12 @@ app.get('/todos/:id/edit', (req, res) => {
 //route to update server after edit
 app.post('/todos/:id/edit', (req, res) => {
   const id = req.params.id
-  const name = req.body.name
+  const { name, isDone } = req.body
   return Todo.findById(id)
     .then(todo => {
       todo.name = name
+      todo.isDone = isDone === 'on'
+      console.log(todo)
       return todo.save()
     })
     .then(() => {
