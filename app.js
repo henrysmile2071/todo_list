@@ -6,6 +6,7 @@ const Todo = require('./models/todo')
 const app = express()
 const bodyParser = require('body-parser')
 const { TopologyDescription } = require('mongodb')
+const methodOverride = require('method-override')
 
 //Mongoose connection
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true }) //setting connection to mongoDB
@@ -26,6 +27,9 @@ app.set('view engine', 'hbs')
 
 //Bodyparser Start
 app.use(bodyParser.urlencoded({ extended: true }))
+
+//Method Override Start
+app.use(methodOverride('_method'))
 
 //Setting routes
 //route for index
@@ -68,7 +72,7 @@ app.get('/todos/:id/edit', (req, res) => {
 })
 
 //route to update server after edit
-app.post('/todos/:id/edit', (req, res) => {
+app.put('/todos/:id', (req, res) => {
   const id = req.params.id
   const { name, isDone } = req.body
   return Todo.findById(id)
@@ -84,7 +88,7 @@ app.post('/todos/:id/edit', (req, res) => {
 })
 
 //route to delete entry
-app.post('/todos/:id/delete', (req, res) => {
+app.delete('/todos/:id', (req, res) => {
   const id = req.params.id
   return Todo.findById(id)
     .then(todo => todo.remove())
