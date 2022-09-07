@@ -7,7 +7,9 @@ const app = express()
 const bodyParser = require('body-parser')
 const { TopologyDescription } = require('mongodb')
 const methodOverride = require('method-override')
+const routes = require('./routes')
 
+const router = require('./routes/modules/home')
 //Mongoose connection
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true }) //setting connection to mongoDB
 
@@ -31,70 +33,8 @@ app.use(bodyParser.urlencoded({ extended: true }))
 //Method Override Start
 app.use(methodOverride('_method'))
 
-//Setting routes
-//route for index
-app.get('/', (req, res) => {
-  Todo.find()
-    .lean()
-    .sort({ _id: 'asc' })
-    .then(todos => res.render('index', { todos }))
-    .catch(error => console.error(error))
-})
-
-//route to new entry page
-app.get('/todos/new', (req, res) => {
-  return res.render('new')
-})
-
-//route to post new entry
-app.post('/todos', (req, res) => {
-  const name = req.body.name
-  return Todo.create({ name })
-    .then(() => res.redirect('/'))
-    .catch(error => console.log(error))
-})
-
-//route to read detail
-app.get('/todos/:id', (req, res) => {
-  const id = req.params.id
-  return Todo.findById(id)
-    .lean()
-    .then((todo) => res.render('detail', { todo }))
-})
-
-//route to edit detail
-app.get('/todos/:id/edit', (req, res) => {
-  const id = req.params.id
-  return Todo.findById(id)
-    .lean()
-    .then((todo) => res.render('edit', { todo }))
-    .catch(error => console.log(error))
-})
-
-//route to update server after edit
-app.put('/todos/:id', (req, res) => {
-  const id = req.params.id
-  const { name, isDone } = req.body
-  return Todo.findById(id)
-    .then(todo => {
-      todo.name = name
-      todo.isDone = isDone === 'on'
-      return todo.save()
-    })
-    .then(() => {
-      res.redirect(`/todos/${id}`)
-    })
-    .catch(error => console.log(error))
-})
-
-//route to delete entry
-app.delete('/todos/:id', (req, res) => {
-  const id = req.params.id
-  return Todo.findById(id)
-    .then(todo => todo.remove())
-    .then(() => res.redirect('/'))
-    .catch(error => console.log(error))
-})
+//Use routes
+app.use(routes)
 
 //Open and listen to server port
 const port = 3000
