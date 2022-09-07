@@ -28,10 +28,11 @@ app.set('view engine', 'hbs')
 app.use(bodyParser.urlencoded({ extended: true }))
 
 //Setting routes
-//route for undex
+//route for index
 app.get('/', (req, res) => {
   Todo.find()
     .lean()
+    .sort({ _id: 'asc' })
     .then(todos => res.render('index', { todos }))
     .catch(error => console.error(error))
 })
@@ -74,7 +75,6 @@ app.post('/todos/:id/edit', (req, res) => {
     .then(todo => {
       todo.name = name
       todo.isDone = isDone === 'on'
-      console.log(todo)
       return todo.save()
     })
     .then(() => {
@@ -87,9 +87,9 @@ app.post('/todos/:id/edit', (req, res) => {
 app.post('/todos/:id/delete', (req, res) => {
   const id = req.params.id
   return Todo.findById(id)
-  .then(todo => todo.remove())
-  .then(() => res.redirect('/'))
-  .catch(error => console.log(error))
+    .then(todo => todo.remove())
+    .then(() => res.redirect('/'))
+    .catch(error => console.log(error))
 })
 
 //Open and listen to server port
