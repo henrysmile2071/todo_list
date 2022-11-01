@@ -25,7 +25,15 @@ router.post('/register', (req, res) => {
         email,
         password,
         confirmPassword,
-        message: 'This email already exists!' })
+        message: 'This email already exists!'
+      })
+    } else if (password !== confirmPassword) {
+      console.log('password check not passed')
+      res.render('register', {
+        name,
+        email,
+        message: 'Password do not match'
+      })
     } else {
       return User.create({
         name,
