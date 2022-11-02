@@ -1,10 +1,12 @@
 {{!-- index.hbs --}}
+<a class="btn btn-outline-light mb-3" href="/todos/new">Create</a>
 <ul class="list-group">
   {{#each todos}}
   <li class="list-group-item">
     <div class="row">
       <div class="col-auto me-auto">
-        <input style="vertical-align: middle;" type="checkbox" name="isDone" {{#if todo.isDone }} checked {{/if}} disabled>
+        <input style="vertical-align: middle;" type="checkbox" name="isDone" {{#if todo.isDone }} checked {{/if}}
+          disabled>
         <h4 style="display: inline; vertical-align: middle;">
           {{this.name}}
         </h4>
