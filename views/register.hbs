@@ -2,6 +2,7 @@
   <div class="col-md-6 m-auto">
     <div class="card card-body">
       <h2 class="text-center mt-3">Register</h2>
+      {{> message}}
       <form action="/users/register" method="post">
         <div class="mb-3">
           <label for="name" class="mb-2">Name</label>
@@ -28,9 +29,6 @@
       <p class="lead mt-4">
         Have an account? <a href="/users/login">Login</a>
       </p>
-      {{#if message}}
-      <div class="alert alert-warning">{{message}}</div>
-      {{/if}}
     </div>
   </div>
 </div>
