@@ -5,11 +5,12 @@ const router = express.Router()
 const home = require('./modules/home')
 const todos = require('./modules/todos')
 const users = require('./modules/users')
+const {authenticator} = require('../middleware/auth')
 
 //route '/' to home module
-router.use('/', home)
-router.use('/todos', todos)
+router.use('/todos', authenticator, todos)
 router.use('/users',users)
+router.use('/', authenticator, home)
 
 //export router
 module.exports = router
