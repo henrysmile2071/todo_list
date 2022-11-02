@@ -10,6 +10,7 @@ require('./config/mongoose')
 const session = require('express-session')
 const usePassport = require('./config/passport')
 const flash = require('connect-flash')
+
 //Handlebars Start engine
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
