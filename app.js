@@ -31,7 +31,6 @@ usePassport(app)
 
 //Middleware: get username from req
 app.use((req,res,next) => {
-  console.log(req.user)
   res.locals.isAuthenticated = req.isAuthenticated()
   res.locals.user = req.user
   next()
