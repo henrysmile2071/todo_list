@@ -8,7 +8,7 @@ const methodOverride = require('method-override')
 const routes = require('./routes')
 require('./config/mongoose')
 const session = require('express-session')
-
+const usePassport = require('./config/passport')
 //Handlebars Start engine
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
@@ -25,6 +25,9 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 //Method Override Start
 app.use(methodOverride('_method'))
+
+//Use Passport
+usePassport(app)
 
 //Use routes
 app.use(routes)
