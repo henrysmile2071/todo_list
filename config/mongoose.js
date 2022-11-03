@@ -1,5 +1,8 @@
 const mongoose = require('mongoose') //require mongoose
 const MONGODB_URI = process.env.MONGODB_URI
+if (process.env.NODE_ENV !== 'production') {
+  
+}
 //Mongoose connection
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }) //setting connection to mongoDB
 
